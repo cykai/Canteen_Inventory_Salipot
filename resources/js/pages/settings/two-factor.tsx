@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { ShieldBan, ShieldCheck } from 'lucide-react';
 import { useState } from 'react';
 import Heading from '@/components/heading';
@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { disable, enable, show } from '@/routes/two-factor';
 import type { BreadcrumbItem } from '@/types';
 
 type Props = {
@@ -20,9 +19,31 @@ type Props = {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Two-factor authentication',
-        href: show(),
+        href: '/settings/two-factor',
     },
 ];
+
+function DisableForm() {
+    const { delete: destroy, processing } = useForm({});
+    return (
+        <form onSubmit={(e) => { e.preventDefault(); destroy('/user/two-factor-authentication'); }}>
+            <Button variant="destructive" type="submit" disabled={processing}>
+                <ShieldBan /> Disable 2FA
+            </Button>
+        </form>
+    );
+}
+
+function EnableForm({ onSuccess }: { onSuccess: () => void }) {
+    const { post, processing } = useForm({});
+    return (
+        <form onSubmit={(e) => { e.preventDefault(); post('/user/two-factor-authentication', { onSuccess }); }}>
+            <Button type="submit" disabled={processing}>
+                <ShieldCheck /> Enable 2FA
+            </Button>
+        </form>
+    );
+}
 
 export default function TwoFactor({
     requiresConfirmation = false,
@@ -70,17 +91,7 @@ export default function TwoFactor({
                             />
 
                             <div className="relative inline">
-                                <Form {...disable.form()}>
-                                    {({ processing }) => (
-                                        <Button
-                                            variant="destructive"
-                                            type="submit"
-                                            disabled={processing}
-                                        >
-                                            <ShieldBan /> Disable 2FA
-                                        </Button>
-                                    )}
-                                </Form>
+                                <DisableForm />
                             </div>
                         </div>
                     ) : (
@@ -95,29 +106,12 @@ export default function TwoFactor({
 
                             <div>
                                 {hasSetupData ? (
-                                    <Button
-                                        onClick={() => setShowSetupModal(true)}
-                                    >
+                                    <Button onClick={() => setShowSetupModal(true)}>
                                         <ShieldCheck />
                                         Continue setup
                                     </Button>
                                 ) : (
-                                    <Form
-                                        {...enable.form()}
-                                        onSuccess={() =>
-                                            setShowSetupModal(true)
-                                        }
-                                    >
-                                        {({ processing }) => (
-                                            <Button
-                                                type="submit"
-                                                disabled={processing}
-                                            >
-                                                <ShieldCheck />
-                                                Enable 2FA
-                                            </Button>
-                                        )}
-                                    </Form>
+                                    <EnableForm onSuccess={() => setShowSetupModal(true)} />
                                 )}
                             </div>
                         </div>

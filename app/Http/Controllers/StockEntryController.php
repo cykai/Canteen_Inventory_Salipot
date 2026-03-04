@@ -10,19 +10,17 @@ use Illuminate\Database\Eloquent\Builder;
 
 class StockEntryController extends Controller
 {
-    /**
-     * Display a listing of all stock entries with filters
-     */
+  
     public function index(Request $request)
     {
         $query = StockEntry::with('product', 'supplier');
 
-        // Filter by product
+       
         if ($request->has('product_id') && $request->product_id) {
             $query->where('product_id', $request->product_id);
         }
 
-        // Filter by supplier
+      
         if ($request->has('supplier_id') && $request->supplier_id) {
             $query->where('supplier_id', $request->supplier_id);
         }
@@ -34,9 +32,7 @@ class StockEntryController extends Controller
         return view('stock_entries.index', compact('stockEntries', 'allProducts', 'allSuppliers'));
     }
 
-    /**
-     * Show the form for creating a new stock entry
-     */
+  
     public function create()
     {
         $products = Product::all();
@@ -45,12 +41,10 @@ class StockEntryController extends Controller
         return view('stock_entries.create', compact('products', 'suppliers'));
     }
 
-    /**
-     * Store a newly created stock entry and update product stock
-     */
+ 
     public function store(Request $request)
     {
-        // Validation
+
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
             'supplier_id' => 'required|exists:suppliers,id',
@@ -61,28 +55,26 @@ class StockEntryController extends Controller
             'quantity.min' => 'Quantity must be greater than zero.',
         ]);
 
-        // Create stock entry
+
         $stockEntry = StockEntry::create($validated);
 
-        // Update product's current stock
+
         $product = Product::findOrFail($validated['product_id']);
         $product->increment('current_stock', $validated['quantity']);
 
         return redirect('/stock-entries')->with('success', 'Stock entry recorded successfully! Product stock updated.');
     }
 
-    /**
-     * Remove the specified stock entry and reduce product stock
-     */
+ 
     public function destroy(StockEntry $stockEntry)
     {
         $product = $stockEntry->product;
         $quantity = $stockEntry->quantity;
 
-        // Delete the stock entry
+    
         $stockEntry->delete();
 
-        // Reduce product's current stock
+      
         $product->decrement('current_stock', $quantity);
 
         return redirect('/stock-entries')->with('success', 'Stock entry deleted and product stock reduced.');

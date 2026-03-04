@@ -52,9 +52,13 @@ jobs:
 
       - name: Configure SQLite
         run: |
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=:memory:" >> .env
-          touch database/database.sqlite
+          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+          sed -i 's/DB_HOST=.*//' .env
+          sed -i 's/DB_PORT=.*//' .env
+          sed -i 's/DB_DATABASE=.*/DB_DATABASE=\/home\/runner\/work\/database.sqlite/' .env
+          sed -i 's/DB_USERNAME=.*//' .env
+          sed -i 's/DB_PASSWORD=.*//' .env
+          touch /home/runner/work/database.sqlite
 
       - name: Run Migrations
         run: php artisan migrate --force

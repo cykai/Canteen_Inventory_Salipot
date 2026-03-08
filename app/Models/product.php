@@ -21,9 +21,7 @@ class Product extends Model
         'current_stock' => 'integer',
     ];
 
-    /**
-     * Get all suppliers for this product
-     */
+    
     public function suppliers()
     {
         return $this->belongsToMany(Supplier::class, 'stock_entries')
@@ -31,9 +29,7 @@ class Product extends Model
                     ->withTimestamps();
     }
 
-    /**
-     * Get all stock entries for this product
-     */
+ 
     public function stockEntries()
     {
         return $this->hasMany(StockEntry::class);

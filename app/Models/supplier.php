@@ -16,9 +16,7 @@ class Supplier extends Model
         'contact_number',
     ];
 
-    /**
-     * Get all products supplied by this supplier
-     */
+    
     public function products()
     {
         return $this->belongsToMany(Product::class, 'stock_entries')
@@ -26,9 +24,7 @@ class Supplier extends Model
                     ->withTimestamps();
     }
 
-    /**
-     * Get all stock entries for this supplier
-     */
+   
     public function stockEntries()
     {
         return $this->hasMany(StockEntry::class);

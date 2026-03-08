@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Page Header -->
     <div class="mb-4">
         <h1 class="display-5 fw-bold text-dark">
             <i class="fas fa-{{ isset($product) ? 'edit' : 'plus' }}"></i>
@@ -15,7 +14,6 @@
         </p>
     </div>
 
-    <!-- Form Card -->
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
@@ -33,7 +31,6 @@
                             @method('PUT')
                         @endif
 
-                        <!-- Product Code -->
                         <div class="mb-4">
                             <label for="product_code" class="form-label">
                                 <i class="fas fa-barcode"></i> Product Code *
@@ -52,7 +49,7 @@
                             <small class="form-text text-muted">Unique identifier for the product</small>
                         </div>
 
-                        <!-- Product Name -->
+        
                         <div class="mb-4">
                             <label for="product_name" class="form-label">
                                 <i class="fas fa-box"></i> Product Name *
@@ -88,7 +85,7 @@
                             @enderror
                         </div>
 
-                        <!-- Current Stock (Read-only) -->
+            
                         @if(isset($product))
                         <div class="mb-4">
                             <label for="current_stock" class="form-label">
@@ -104,7 +101,7 @@
                         </div>
                         @endif
 
-                        <!-- Form Actions -->
+      
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
                             <a href="{{ route('products.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-times"></i> Cancel

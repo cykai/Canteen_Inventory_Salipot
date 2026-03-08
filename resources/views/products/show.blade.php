@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Page Header with Back Button -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <a href="{{ route('products.index') }}" class="btn btn-secondary btn-sm">
@@ -21,9 +20,9 @@
         </div>
     </div>
 
-    <!-- Product Details Row -->
+
     <div class="row g-4 mb-5">
-        <!-- Product Information Card -->
+
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
@@ -65,7 +64,7 @@
             </div>
         </div>
 
-        <!-- Suppliers Card -->
+
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
